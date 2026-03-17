@@ -1,4 +1,4 @@
 import LeanPimeval
 
 def main : IO Unit :=
-  IO.println s!"Hello, {hello}!"
+  IO.println "LeanPimeval build OK"
