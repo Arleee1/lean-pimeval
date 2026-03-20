@@ -86,6 +86,18 @@ def pimShiftElementsRight
         src.elems.get ⟨i.1.pred, Nat.lt_trans (Nat.pred_lt h) i.2⟩)
     PimObj.mk shiftedElems
 
+def pimShiftElementsLeft
+    {α : Type} [Zero α]
+    {n : Nat} :
+    PimObj α n -> PimObj α n :=
+  fun (src : PimObj α n) =>
+    let shiftedElems := Vector.ofFn (fun i : Fin n =>
+      if h : i.1 + 1 < n then
+        src.elems.get ⟨i.1 + 1, h⟩
+      else
+        0)
+    PimObj.mk shiftedElems
+
 section PimShiftElementsRightProperties
 
 theorem pimShiftElementsRight_firstElem_zero
@@ -117,6 +129,37 @@ theorem pimShiftElementsRight_succ_eq_original
 
 end PimShiftElementsRightProperties
 
+section PimShiftElementsLeftProperties
+
+theorem pimShiftElementsLeft_lastElem_zero
+    {α : Type} [Zero α]
+    {n : Nat}
+    (src : PimObj α (n + 1)) :
+    (pimShiftElementsLeft src).elems[n] = 0 := by
+  cases src with
+  | mk elems =>
+    simp [pimShiftElementsLeft]
+
+theorem pimShiftElementsLeft_length_same
+    {α : Type} [Zero α]
+    {n : Nat}
+    (src : PimObj α n) :
+    (pimShiftElementsLeft src).elems.toArray.size = src.elems.toArray.size := by
+  simp [pimShiftElementsLeft]
+
+theorem pimShiftElementsLeft_eq_original_succ
+    {α : Type} [Zero α]
+    {n : Nat}
+    (src : PimObj α (n + 1)) :
+    ∀ i : Nat, ∀ hi : i < n, (pimShiftElementsLeft src).elems[i] =
+      src.elems.get ⟨i + 1, Nat.succ_lt_succ hi⟩ := by
+  intro i hi
+  cases src with
+  | mk elems =>
+    simp [pimShiftElementsLeft, hi]
+
+end PimShiftElementsLeftProperties
+
 instance : Add String where
   add := String.append
 
@@ -127,3 +170,4 @@ instance : Add String where
 #eval pimMul (PimObj.mk ⟨(#[10, 7, 13] : Array Int), rfl⟩) (PimObj.mk ⟨#[4, 5, 6], rfl⟩)
 #eval pimMAC (PimObj.mk ⟨(#[10, 7, 13] : Array Int), rfl⟩) (PimObj.mk ⟨#[4, 5, 6], rfl⟩)
 #eval pimShiftElementsRight (PimObj.mk ⟨(#[10, 7, 13] : Array Int), rfl⟩)
+#eval pimShiftElementsLeft (PimObj.mk ⟨(#[10, 7, 13] : Array Int), rfl⟩)
