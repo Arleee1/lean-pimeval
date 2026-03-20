@@ -11,8 +11,8 @@ import LeanPimeval.CoreInverses.Proofs
 
 /-- A single Equiv parametrized by IsBank -/
 def coreEquiv (NumCoreInNextLevel NumBankPerRank NumChipPerRank : ℕ+) (IsBank : Bool)
-  (h_divides : NumBankPerRank.val % NumChipPerRank.val = 0) :
-  PimCoreId ≃ { loc : PimCoreLocation // ValidLocation NumCoreInNextLevel.val NumBankPerRank.val NumChipPerRank.val IsBank loc } where
+    (h_divides : NumBankPerRank.val % NumChipPerRank.val = 0) :
+    PimCoreId ≃ { loc : PimCoreLocation // ValidLocation NumCoreInNextLevel.val NumBankPerRank.val NumChipPerRank.val IsBank loc } where
 
   toFun := fun id =>
     let loc := getCoreLocation id NumCoreInNextLevel.val NumBankPerRank.val NumChipPerRank.val IsBank
